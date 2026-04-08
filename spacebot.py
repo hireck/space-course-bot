@@ -101,10 +101,12 @@ Standalone version of the question:
 print("Loading language model …")
 #gpt4 = ChatOpenAI(model_name="gpt-4o", temperature=0, openai_api_key=OPENAI_API_KEY)
 
-client = OpenAI(
-    base_url="http://localhost:8081/v1",
-    api_key="not-needed"  # required by the SDK but ignored by llama.cpp
-)
+#client = OpenAI(
+#    base_url="http://localhost:8081/v1",
+#    api_key="not-needed"  # required by the SDK but ignored by llama.cpp
+#)
+#In Docker:
+client = OpenAI(base_url="http://llamacpp:8081/v1", api_key="not-needed")
 
 print("Loading embedding model …")
 embed_model = SentenceTransformer("sentence-transformers/all-MiniLM-L12-v2")
@@ -117,7 +119,9 @@ cross_encoder = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
 # ---------------------------------------------------------------------------
 
 print("Connecting to Weaviate …")
-weaviate_client = weaviate.connect_to_local()
+#weaviate_client = weaviate.connect_to_local()
+#In Docker:
+weaviate_client = weaviate.connect_to_local(host="weaviate", port=8080)
 assert weaviate_client.is_ready(), "Weaviate is not ready!"
 chunks_collection = weaviate_client.collections.get("DocumentChunk")
 
